@@ -2,30 +2,37 @@
 
 ## Overview
 
-This repository is a Java Swing desktop application. It currently uses local Java object serialization for persistence; there is no relational database, JDBC layer, REST API, or hosted backend.
+This repository is a Java Swing desktop application. It uses local Java object serialization for persistence; there is no relational database, JDBC layer, REST API, or hosted backend.
 
 ## Component diagram
 
 ```mermaid
 flowchart TD
-    U[Administrator / demo user] --> UI[Swing presentation layer]
-    subgraph UI[Swing presentation layer]
-        L[Login]
-        M[Menu and dialogs]
-        A[Account forms and lists]
+    USER[Administrator / demo user]
+    subgraph PRESENTATION["Swing presentation layer"]
+        LOGIN[Login window]
+        MENU[Menu and navigation]
+        FORMS[Account forms and dialogs]
+        REPORTS[Dashboard and CSV export]
+        LOGIN --> MENU
+        MENU --> FORMS
+        MENU --> REPORTS
     end
-    UI --> B[Bank domain model]
-    subgraph DOMAIN[Banking domain]
-        B --> BA[BankAccount and account subtypes]
-        B --> T[Transaction records]
-        BA --> S[SavingsAccount]
-        BA --> C[CurrentAccount]
-        S --> ST[StudentAccount]
+    USER --> LOGIN
+    FORMS --> BANK[Bank domain model]
+    REPORTS --> BANK
+    MENU --> BANK
+    subgraph DOMAIN["Banking domain"]
+        BANK --> ACCOUNT[BankAccount and account subtypes]
+        BANK --> TX[Transaction records]
+        ACCOUNT --> SAVINGS[SavingsAccount]
+        ACCOUNT --> CURRENT[CurrentAccount]
+        SAVINGS --> STUDENT[StudentAccount]
     end
-    B <--> F[FileIO persistence adapter]
-    F <--> D[(Local serialized file: data)]
-    TEST[BankingSystemTests] --> B
-    CI[GitHub Actions] --> TEST
+    BANK <--> FILEIO[FileIO persistence adapter]
+    FILEIO <--> DATA[(Local serialized file: data)]
+    TESTS[BankingSystemTests] --> BANK
+    CI[GitHub Actions] --> TESTS
 ```
 
 ## Responsibilities
@@ -60,4 +67,4 @@ flowchart TD
 
 ## Current architecture boundaries
 
-The GUI currently accesses the static `FileIO.bank` instance directly. This keeps the demo simple, but it couples presentation code to persistence. A future refactor could introduce a service layer and repository interface so the application can switch from local files to a database without rewriting the Swing screens.
+The GUI currently accesses the static `FileIO.bank` instance directly. This keeps the demo simple, but couples presentation code to persistence. A future refactor could introduce a service layer and repository interface so the application can switch from local files to a database without rewriting the Swing screens.

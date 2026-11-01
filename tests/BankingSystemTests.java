@@ -23,7 +23,10 @@ public final class BankingSystemTests {
         testCloseAccountRecordsClosure();
         testDefensiveAccountArray();
         testSerializationRoundTrip();
-        System.out.println("PASS: " + passed + " core banking tests");
+        testAccountTypeRulesAndValidation();
+        testUnknownAccountHandling();
+        testRejectedWithdrawalDoesNotMutateBalances();
+        System.out.println("PASS: " + passed + " core banking assertions");
     }
     private static void testCreateAndFindAccount() {
         Bank bank = new Bank(); SavingsAccount account = new SavingsAccount("Test User", 3000, 1000);
@@ -86,6 +89,50 @@ public final class BankingSystemTests {
         check(restored.findAccount(a.getAccountNumber()) != null, "account survives serialization");
         check(restored.getTransactions().size() == 2, "history survives serialization");
     }
+
+    private static void testAccountTypeRulesAndValidation() throws Exception {
+        Bank bank = new Bank();
+        SavingsAccount savings = new SavingsAccount("Savings User", 4000, 1000);
+        CurrentAccount current = new CurrentAccount("Current User", 5000, "LIC-456");
+        Bank.StudentAccount student = new Bank.StudentAccount("Student User", "Example Institute", 1000, 100);
+        bank.addAccount(savings);
+        bank.addAccount(current);
+        bank.addAccount(student);
+
+        expect(MaxWithdraw.class, () -> bank.withdraw(savings.getAccountNumber(), 1001));
+        check(savings.getbalance() == 4000, "rejected savings withdrawal preserves balance");
+        bank.withdraw(savings.getAccountNumber(), 1000);
+        check(savings.getbalance() == 3000, "savings withdrawal at configured limit");
+        check("LIC-456".equals(current.getTradeLicenseNumber()), "current account trade licence");
+        check("Example Institute".equals(student.getInstitutionName()), "student account institution");
+
+        expect(IllegalArgumentException.class, () -> new CurrentAccount("Invalid", 5000, " "));
+        expect(IllegalArgumentException.class, () -> new Bank.StudentAccount("Invalid", " ", 1000, 100));
+        expect(IllegalArgumentException.class, () -> new SavingsAccount("Invalid", 3000, 0));
+    }
+
+    private static void testUnknownAccountHandling() throws Exception {
+        Bank bank = new Bank();
+        expect(AccNotFound.class, () -> bank.deposit("missing-account", 100));
+        expect(AccNotFound.class, () -> bank.withdraw("missing-account", 100));
+        expect(AccNotFound.class, () -> bank.transfer("missing-source", "missing-destination", 100));
+        expect(InvalidAmount.class, () -> bank.deposit("missing-account", Double.NaN));
+    }
+
+    private static void testRejectedWithdrawalDoesNotMutateBalances() throws Exception {
+        Bank bank = new Bank();
+        SavingsAccount from = new SavingsAccount("Insufficient User", 3000, 2000);
+        SavingsAccount to = new SavingsAccount("Recipient User", 2500, 2000);
+        bank.addAccount(from);
+        bank.addAccount(to);
+        int historyBefore = bank.getTransactions().size();
+
+        expect(MaxBalance.class, () -> bank.transfer(from.getAccountNumber(), to.getAccountNumber(), 1500));
+        check(from.getbalance() == 3000, "rejected transfer preserves source balance");
+        check(to.getbalance() == 2500, "rejected transfer preserves destination balance");
+        check(bank.getTransactions().size() == historyBefore, "rejected transfer does not add transfer records");
+    }
+
     private static void check(boolean condition, String name) { if (!condition) throw new AssertionError(name); passed++; }
     private static void expect(Class<? extends Throwable> type, ThrowingRunnable action) throws Exception {
         try { action.run(); } catch (Throwable ex) { if (type.isInstance(ex)) { passed++; return; } throw new AssertionError("Expected " + type.getSimpleName() + " but got " + ex, ex); }

@@ -133,7 +133,7 @@ javac -encoding UTF-8 -d bin -sourcepath src src/Application.java tests/BankingS
 java -ea -cp bin BankingSystemTests
 ```
 
-The regression suite exercises account creation and lookup, deposits, invalid amounts, minimum balances, withdrawals, transfers, transfer limits, dashboard metrics, transaction history, account closure, defensive copies, and serialization round-tripping.
+The regression suite exercises account creation and lookup, account subtype rules, constructor validation, deposits, invalid amounts, missing accounts, minimum balances, withdrawals, transfers, transfer limits, rejected-operation balance integrity, dashboard metrics, transaction history, account closure, defensive copies, and serialization round-tripping.
 
 GitHub Actions runs the compile and test commands on pushes and pull requests to `main`.
 
