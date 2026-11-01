@@ -95,7 +95,7 @@ public final class BankingSystemTests {
         Bank bank = new Bank();
         SavingsAccount savings = new SavingsAccount("Savings User", 4000, 1000);
         CurrentAccount current = new CurrentAccount("Current User", 5000, "LIC-456");
-        StudentAccount student = new StudentAccount("Student User", "Example Institute", 1000);
+        StudentAccount student = new StudentAccount("Student User", 1000, "Example Institute");
         bank.addAccount(savings);
         bank.addAccount(current);
         bank.addAccount(student);
@@ -108,7 +108,7 @@ public final class BankingSystemTests {
         check("Example Institute".equals(student.getInstitutionName()), "student account institution");
 
         expect(IllegalArgumentException.class, () -> new CurrentAccount("Invalid", 5000, " "));
-        expect(IllegalArgumentException.class, () -> new StudentAccount("Invalid", " ", 1000));
+        expect(IllegalArgumentException.class, () -> new StudentAccount("Invalid", 1000, " "));
         expect(IllegalArgumentException.class, () -> new SavingsAccount("Invalid", 3000, 0));
     }
 
