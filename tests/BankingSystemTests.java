@@ -2,6 +2,7 @@ import Bank.Bank;
 import Bank.BankAccount;
 import Bank.SavingsAccount;
 import Bank.CurrentAccount;
+import Bank.StudentAccount;
 import Exceptions.AccNotFound;
 import Exceptions.InvalidAmount;
 import Exceptions.MaxBalance;
@@ -94,7 +95,7 @@ public final class BankingSystemTests {
         Bank bank = new Bank();
         SavingsAccount savings = new SavingsAccount("Savings User", 4000, 1000);
         CurrentAccount current = new CurrentAccount("Current User", 5000, "LIC-456");
-        Bank.StudentAccount student = new Bank.StudentAccount("Student User", "Example Institute", 1000, 100);
+        StudentAccount student = new StudentAccount("Student User", "Example Institute", 1000);
         bank.addAccount(savings);
         bank.addAccount(current);
         bank.addAccount(student);
@@ -107,7 +108,7 @@ public final class BankingSystemTests {
         check("Example Institute".equals(student.getInstitutionName()), "student account institution");
 
         expect(IllegalArgumentException.class, () -> new CurrentAccount("Invalid", 5000, " "));
-        expect(IllegalArgumentException.class, () -> new Bank.StudentAccount("Invalid", " ", 1000, 100));
+        expect(IllegalArgumentException.class, () -> new StudentAccount("Invalid", " ", 1000));
         expect(IllegalArgumentException.class, () -> new SavingsAccount("Invalid", 3000, 0));
     }
 
