@@ -23,7 +23,9 @@ jobs:
           java-version: '17'
 
       - name: Compile application and tests
-        run: javac -encoding UTF-8 -d bin -sourcepath src src/Application.java tests/BankingSystemTests.java
+        run: |
+          mkdir -p bin
+          javac -encoding UTF-8 -d bin -sourcepath src src/Application.java tests/BankingSystemTests.java
 
       - name: Run core banking tests
         run: java -ea -cp bin BankingSystemTests

@@ -1,14 +1,8 @@
 # Banking Management System
 
-A Java Swing desktop application that demonstrates common banking workflows, object-oriented programming, account-specific rules, transaction records, local file persistence, and a lightweight regression test harness.
+A Java Swing desktop application that demonstrates banking workflows, account-specific rules, transaction records, local file persistence, and a dependency-free regression test harness.
 
-> **Learning/demo project only.** This is not production banking software. Do not use it to store real customer data, credentials, or money.
-
-## Screenshots
-
-| Login screen | Main dashboard | Add account |
-|---|---|---|
-| ![Login screen](screenshots/login.png) | ![Main dashboard](screenshots/dashboard.png) | ![Add account](screenshots/add-account.png) |
+> **Educational/demo project only.** This is not production banking software. Do not use it to store real customer data, credentials, or money.
 
 ## Features
 
@@ -25,16 +19,11 @@ A Java Swing desktop application that demonstrates common banking workflows, obj
 
 ## Technology
 
-- Java (JDK 11 or newer; JDK 17/21 recommended)
+- Java (JDK 11 or newer; JDK 17 recommended)
 - Java Swing
 - Object-oriented programming
 - Java serialization and file I/O
 - CSV export
-
-## Requirements
-
-- JDK 11+
-- VS Code with Extension Pack for Java, Eclipse, or another Java IDE
 
 ## Run the application
 
@@ -42,12 +31,14 @@ Open a terminal in the project root (the folder containing `src/` and `README.md
 
 **Windows PowerShell**
 ```powershell
+New-Item -ItemType Directory -Force bin | Out-Null
 javac -encoding UTF-8 -d bin -sourcepath src src\Application.java
 java -cp bin Application
 ```
 
 **macOS / Linux**
 ```bash
+mkdir -p bin
 javac -encoding UTF-8 -d bin -sourcepath src src/Application.java
 java -cp bin Application
 ```
@@ -65,17 +56,19 @@ The test harness has no third-party dependency.
 
 **Windows PowerShell**
 ```powershell
+New-Item -ItemType Directory -Force bin | Out-Null
 javac -encoding UTF-8 -d bin -sourcepath src src\Application.java tests\BankingSystemTests.java
 java -ea -cp bin BankingSystemTests
 ```
 
 **macOS / Linux**
 ```bash
+mkdir -p bin
 javac -encoding UTF-8 -d bin -sourcepath src src/Application.java tests/BankingSystemTests.java
 java -ea -cp bin BankingSystemTests
 ```
 
-The test harness covers account lookup, deposits, invalid amounts, minimum balance, transfers, transfer limits, dashboard metrics, transaction history, account closure, defensive copies, and serialization round-tripping.
+The regression suite covers account lookup, deposits, invalid amounts, minimum balance, transfers, transfer limits, dashboard metrics, transaction history, account closure, defensive copies, and serialization round-tripping.
 
 ## Project structure
 
@@ -85,11 +78,8 @@ src/
 ├── Bank/          # Account models, bank operations, transactions
 ├── Data/          # Local file persistence
 ├── Exceptions/    # Domain-specific exceptions
-├── GUI/           # Swing windows and dialogs
-└── img/           # UI assets
+└── GUI/           # Swing windows and dialogs
 tests/             # Core-logic regression tests
-screenshots/       # Application screenshots
-Bank.pdf           # Supplied project documentation
 ```
 
 ## Data and security notes
@@ -100,13 +90,12 @@ Bank.pdf           # Supplied project documentation
 - Transfer validation is designed for a single-user desktop application, not concurrent multi-user banking.
 - Account closure simulates a cash payout; no real funds are moved.
 
-## Potential next improvements
+## Future improvements
 
 - Add a MySQL-backed repository and explicit transaction boundaries
 - Separate UI, service, and persistence layers more strictly
 - Replace demo authentication with secure password hashing and user roles
-- Add CI to compile and run the test harness on every push
-- Add input-validation and GUI-level tests
+- Add GUI-level and integration tests
 
 ## License
 
