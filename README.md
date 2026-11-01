@@ -2,6 +2,12 @@
 
 A Java Swing desktop application that demonstrates banking workflows, account-specific rules, transaction records, local file persistence, and a dependency-free regression test harness.
 
+## Screenshots
+
+| Login | Dashboard | Add Account |
+|---|---|---|
+| ![Login screen](screenshots/login.png) | ![Dashboard](screenshots/dashboard.png) | ![Add account screen](screenshots/add-account.png) |
+
 > **Educational/demo project only.** This is not production banking software. Do not use it to store real customer data, credentials, or money.
 
 ## Features
