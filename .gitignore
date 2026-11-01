@@ -2,6 +2,7 @@
 *.class
 /data
 /data.bin
+/data.tmp
 *.csv
 .DS_Store
 Thumbs.db
