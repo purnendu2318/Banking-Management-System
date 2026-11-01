@@ -4,6 +4,14 @@ A Java Swing desktop application demonstrating common banking operations, object
 
 > **Educational project only.** This is not production banking software. Do not use it to manage real money, real customer accounts, or sensitive financial information.
 
+## Application preview
+
+The following screenshots are included in the `screenshots/` directory.
+
+| Login | Main dashboard | Add account |
+|---|---|---|
+| ![Login screen](screenshots/login.png) | ![Main dashboard](screenshots/dashboard.png) | ![Add account screen](screenshots/add-account.png) |
+
 ## Features
 
 - Create savings, current, and student accounts
@@ -35,7 +43,7 @@ From the project root:
 
 **Windows PowerShell**
 ```powershell
-javac -encoding UTF-8 -d bin -sourcepath src src\Application.java
+javac -encoding UTF-8 -d bin -sourcepath src src\\Application.java
 java -cp bin Application
 ```
 
@@ -58,7 +66,7 @@ The test harness has no third-party dependencies.
 
 **Windows PowerShell**
 ```powershell
-javac -encoding UTF-8 -d bin -sourcepath src src\Application.java tests\BankingSystemTests.java
+javac -encoding UTF-8 -d bin -sourcepath src src\\Application.java tests\\BankingSystemTests.java
 java -ea -cp bin BankingSystemTests
 ```
 
@@ -79,7 +87,7 @@ src/
 ├── GUI/           # Swing screens and dialogs
 └── img/           # Application UI assets
 tests/             # Core-logic regression tests
-screenshot/        # Application screenshots
+screenshots/       # Application screenshots
 ```
 
 ## Data and security notes
@@ -89,6 +97,14 @@ screenshot/        # Application screenshots
 - The app uses `double` for money and Java serialization for persistence. A production system would require `BigDecimal` or integer minor units, a transactional database, secure password hashing, role-based access control, audit logging, concurrency controls, and extensive integration/security testing.
 - Transfer validation is intended for a single-user desktop application, not concurrent multi-user banking.
 - Closing an account simulates a cash payout; it does not move real money.
+
+## Future improvements
+
+- Replace local serialized storage with MySQL and transaction-safe database operations
+- Hash passwords and introduce role-based access control
+- Add input-validation and service-layer unit tests
+- Add automated build and test workflows with GitHub Actions
+- Improve accessibility, responsive layout, and UI feedback
 
 ## License
 
